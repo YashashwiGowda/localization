@@ -34,19 +34,19 @@ The node provides continuous pose estimation and prevents large discontinuities 
  
 ##  Key Features
  
-### 1️⃣ Hybrid Sensor Fusion
+### 1️) Hybrid Sensor Fusion
 - Fusion of OptiTrack pose and wheel odometry
 - Linear Kalman Filter-based state estimation
 - Smooth drift correction after sensor recovery
  
-### 2️⃣ Dead Reckoning Mode
+### 2️) Dead Reckoning Mode
 When external positioning is temporarily unavailable:
 - Uses last valid pose
 - Propagates vehicle motion using wheel encoder speed
 - Runs Kalman Filter in prediction-only mode
 - Avoids pose jumps when external data returns
  
-### 3️⃣ Robust Fail-Safe Behavior
+### 3️) Robust Fail-Safe Behavior
 If no valid pose is available:
 - Vehicle motion is safely prevented
 - System automatically resumes normal operation once localization is initialized
@@ -108,7 +108,7 @@ All defined performance indicators were successfully met.
 
 ---
 
-## 📈 State Estimation Validation (PlotJuggler)
+##  State Estimation Validation (PlotJuggler)
 
 State estimation performance was analyzed using **PlotJuggler** by visualizing the estimated states under two operating conditions:
 
@@ -119,7 +119,7 @@ The plots below demonstrate system stability, smooth state propagation, and cont
 
 ---
 
-### 🔹 Velocity Estimation (Twist)
+###  Velocity Estimation (Twist)
 
 #### Ideal State
 
@@ -140,7 +140,7 @@ The plots below demonstrate system stability, smooth state propagation, and cont
 
 ---
 
-### 🔹 Yaw Rate Estimation
+###  Yaw Rate Estimation
 
 #### Ideal State
 
@@ -161,7 +161,7 @@ The plots below demonstrate system stability, smooth state propagation, and cont
 
 ---
 
-### 🔹 Pose Estimation (Position & Orientation)
+###  Pose Estimation (Position & Orientation)
 
 #### Ideal State
 
@@ -182,7 +182,7 @@ The plots below demonstrate system stability, smooth state propagation, and cont
 
 ---
 
-### 📌 Summary
+###  Summary
 
 The PlotJuggler visualizations confirm that:
 
@@ -195,28 +195,28 @@ These results validate the robustness of the hybrid localization approach.
  
 ##  Installation
  
-### 1️⃣ Create ROS2 workspace
+### 1️) Create ROS2 workspace
  
 ```bash
 mkdir -p loc_ws/src
 cd loc_ws/src
 ```
  
-### 2️⃣ Clone repositories
+### 2️) Clone repositories
  
 ```bash
 git clone https://github.com/YashashwiGowda/localization.git 
 git clone https://github.com/MOCAP4ROS2-Project/mocap4r2_msgs.git
 ```
  
-### 3️⃣ Build
+### 3️) Build
  
 ```bash
 cd ..
 colcon build
 ```
  
-### 4️⃣ Source
+### 4️) Source
  
 ```bash
 source install/setup.bash
@@ -224,7 +224,7 @@ source install/setup.bash
  
 ---
  
-## ▶️ Usage
+##  Usage
  
 Run the localization node:
  
