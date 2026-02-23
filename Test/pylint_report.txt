@@ -1,0 +1,13 @@
+************* Module localization.localization.localization_node
+src/localization/localization/localization_node.py:322:0: C0305: Trailing newlines (trailing-newlines)
+src/localization/localization/localization_node.py:25:9: C0103: Argument name "a" doesn't conform to snake_case naming style (invalid-name)
+src/localization/localization/localization_node.py:30:18: C0103: Argument name "q" doesn't conform to snake_case naming style (invalid-name)
+src/localization/localization/localization_node.py:70:8: C0103: Attribute name "kf" doesn't conform to snake_case naming style (invalid-name)
+src/localization/localization/localization_node.py:49:0: R0902: Too many instance attributes (18/7) (too-many-instance-attributes)
+src/localization/localization/localization_node.py:176:4: R0914: Too many local variables (17/15) (too-many-locals)
+src/localization/localization/localization_node.py:176:4: R0915: Too many statements (60/50) (too-many-statements)
+src/localization/localization/localization_node.py:289:4: R0913: Too many arguments (7/5) (too-many-arguments)
+
+------------------------------------------------------------------
+Your code has been rated at 9.49/10 
+
