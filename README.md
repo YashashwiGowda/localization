@@ -105,6 +105,93 @@ The localization system was validated using scenario-based testing:
 All defined performance indicators were successfully met.
  
 ---
+
+---
+
+## 📈 State Estimation Validation (PlotJuggler)
+
+State estimation performance was analyzed using **PlotJuggler** by visualizing the estimated states under two operating conditions:
+
+- **Ideal State** (External positioning available)
+- **Moving State / Dead-Reckoning Mode**
+
+The plots below demonstrate system stability, smooth state propagation, and controlled drift behavior.
+
+---
+
+### 🔹 Velocity Estimation (Twist)
+
+#### Ideal State
+
+<p align="center">
+  <img src="assets/twist_ideal.png" width="85%">
+</p>
+
+#### Moving State
+
+<p align="center">
+  <img src="assets/twist_moving.png" width="85%">
+</p>
+
+**Observation:**
+- Smooth velocity tracking
+- No abrupt jumps during transitions
+- Kalman Filter effectively reduces measurement noise
+
+---
+
+### 🔹 Yaw Rate Estimation
+
+#### Ideal State
+
+<p align="center">
+  <img src="assets/yaw_rate_ideal state.png" width="85%">
+</p>
+
+#### Moving State
+
+<p align="center">
+  <img src="assets/yaw_rate_moving state.png" width="85%">
+</p>
+
+**Observation:**
+- Stable angular velocity estimation
+- Bounded drift during external positioning loss
+- Seamless recovery after sensor reinitialization
+
+---
+
+### 🔹 Pose Estimation (Position & Orientation)
+
+#### Ideal State
+
+<p align="center">
+  <img src="assets/Pose_ideal state.png" width="85%">
+</p>
+
+#### Moving State
+
+<p align="center">
+  <img src="assets/pose_moving state.png" width="85%">
+</p>
+
+**Observation:**
+- Continuous pose estimation during motion
+- Controlled drift under dead-reckoning
+- No large discontinuities after external positioning resumes
+
+---
+
+### 📌 Summary
+
+The PlotJuggler visualizations confirm that:
+
+- The Linear Kalman Filter provides smooth and stable state estimates  
+- Dead-reckoning maintains continuous localization during OptiTrack dropouts  
+- Drift remains gradual and correctable  
+- System transitions between fused and prediction-only modes are seamless  
+
+These results validate the robustness of the hybrid localization approach.
  
 ##  Installation
  
