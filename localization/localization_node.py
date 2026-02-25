@@ -12,7 +12,7 @@ from filterpy.kalman import KalmanFilter
 # ---------------- UTILS ----------------
 # Wrap angle to [-pi, pi]
 # Prevents discontinuities in yaw when crossing ±pi
-# AC 3.3.3 — avoids sudden jumps when switching localization modes
+# Avoids sudden jumps when switching localization modes
 def wrap(a):
     return (a + math.pi) % (2 * math.pi) - math.pi
 
@@ -37,8 +37,8 @@ class LocalizationKF(Node):
         self.dt_default = 0.05
 
         # Thresholds for freeze detection and speed activation
-        # AC 3.27.3 — detect loss of external positioning
-        # AC 3.2.2 — stable estimates when sensor data is temporarily unavailable
+        # detect loss of external positioning
+        # stable estimates when sensor data is temporarily unavailable
         self.freeze_eps = 1e-5
         self.speed_eps = 0.12
 
@@ -57,8 +57,8 @@ class LocalizationKF(Node):
         ])
 
         # Measurement noise covariance
-        # AC 3.27.1 — use OptiTrack pose input
-        # AC 3.2.1 — prevent small sensor noise from causing sudden jumps
+        # use OptiTrack pose input
+        # prevent small sensor noise from causing sudden jumps
         self.kf.R = np.diag([0.02, 0.02, 0.001])
 
         # Process noise parameters
@@ -72,15 +72,15 @@ class LocalizationKF(Node):
         self.prev_yaw = None
 
         # Last known good pose (used in freeze/tunnel modes)
-        # AC 3.27.3 — continue localization without OptiTrack
+        # continue localization without OptiTrack
         # AC 3.2.2 — stable estimates during sensor dropouts
         self.last_px = None
         self.last_py = None
         self.last_yaw = None
 
         # Wheel speed from AckermannDrive
-        # AC 3.27.1 — subscribe to /ackermann_drive_feedback
-        # AC 3.27.2 — use speed to improve motion estimation
+        # subscribe to /ackermann_drive_feedback
+        # use speed to improve motion estimation
         self.last_speed = 0.0
 
         # Initialization flags
@@ -88,7 +88,7 @@ class LocalizationKF(Node):
         self.prev_time = None
 
         # Velocity smoothing
-        # AC 3.2.1 — prevents noise-induced velocity spikes
+        # prevents noise-induced velocity spikes
         self.vx_filt = 0.0
         self.vy_filt = 0.0
         self.vel_alpha = 0.7
@@ -102,8 +102,8 @@ class LocalizationKF(Node):
         self.ay_filt = 0.0
 
         # Deadbands for clean standstill output
-        # AC 3.27.5 — stable outputs at standstill
-        # AC 3.2.1 — suppress noise near zero motion
+        # stable outputs at standstill
+        # suppress noise near zero motion
         self.v_deadband = 0.01
         self.a_deadband = 0.05
 
@@ -116,7 +116,7 @@ class LocalizationKF(Node):
 
     # ---------------- SPEED CALLBACK ----------------
     def cb_speed(self, msg):
-        # AC 3.27.2 — speed input used for motion estimation
+        # speed input used for motion estimation
         self.last_speed = float(msg.speed)
 
     # ---------------- KF MATRIX FUNCTIONS ----------------
@@ -176,8 +176,8 @@ class LocalizationKF(Node):
         dy = y - self.prev_y
         dyaw = wrap(yaw - self.prev_yaw)
 
-        # AC 3.27.3 — detect loss of OptiTrack
-        # AC 3.2.2 — temporary sensor unavailability
+        # detect loss of OptiTrack
+        # temporary sensor unavailability
         mocap_frozen = abs(dx) < self.freeze_eps and abs(dy) < self.freeze_eps and abs(dyaw) < self.freeze_eps
 
         # ---------------- NORMAL KF UPDATE ----------------
@@ -200,16 +200,16 @@ class LocalizationKF(Node):
             return
 
         # ---------------- KF FREEZE MODE ----------------
-        # AC 3.27.3 — localization without external positioning
-        # AC 3.2.2 — stable estimates when sensor data is unavailable
+        # localization without external positioning
+        # stable estimates when sensor data is unavailable
         self.kf.F = np.eye(8); self.kf.Q = np.zeros((8, 8))
         self.kf.predict()
-        # AC 3.3.3 — avoid yaw jumps when switching localization modes
+        # avoid yaw jumps when switching localization modes
         self.kf.x[6, 0] = self.last_yaw; self.kf.x[7, 0] = 0.0
 
         # ---------------- TUNNEL MODE: Use wheel speed ----------------
-        # AC 3.27.2 — speed-based motion estimation
-        # AC 3.27.3 — pose estimation without OptiTrack
+        # speed-based motion estimation
+        # pose estimation without OptiTrack
         if abs(self.last_speed) > self.speed_eps:
             yaw_use = float(self.kf.x[6, 0])
             vx = self.last_speed * math.cos(yaw_use)
@@ -219,7 +219,7 @@ class LocalizationKF(Node):
             self.publish(msg.header, self.last_px, self.last_py, yaw_use, vx, vy)
             return
 
-        # AC 3.27.5 — continuous pose output at standstill
+        # continuous pose output at standstill
         self.publish(msg.header, self.last_px, self.last_py, self.last_yaw, 0.0, 0.0)
 
     # ---------------- PUBLISH FUNCTION ----------------
@@ -227,8 +227,8 @@ class LocalizationKF(Node):
         cy = math.cos(yaw); sy = math.sin(yaw)
         vx_body = cy * vx + sy * vy
         vy_body = -sy * vx + cy * vy
-        # AC 3.27.5 — stable output
-        # AC 3.2.1 — suppress noise near zero velocity
+        # stable output
+        # suppress noise near zero velocity
         if abs(vx_body) < self.v_deadband:
             vx_body = 0.0
         if abs(vy_body) < self.v_deadband:
@@ -252,7 +252,7 @@ class LocalizationKF(Node):
         self.prev_pub_time = now
 
         if stopped:
-            # AC 3.2.1 — no residual acceleration at standstill
+            # no residual acceleration at standstill
             self.prev_vx_body = 0.0; self.prev_vy_body = 0.0
             self.ax_filt = 0.0; self.ay_filt = 0.0
             accel = AccelStamped()
@@ -272,7 +272,7 @@ class LocalizationKF(Node):
             ay_num = 0.0
         self.ax_filt = self.acc_alpha * self.ax_filt + (1 - self.acc_alpha) * ax_num
         self.ay_filt = self.acc_alpha * self.ay_filt + (1 - self.acc_alpha) * ay_num
-        # AC 3.3.3 — smooth transitions between localization modes
+        # smooth transitions between localization modes
         if vx_body > self.v_deadband and self.ax_filt < 0.0:
             self.ax_filt = 0.0
         if vx_body < -self.v_deadband and self.ax_filt > 0.0:
