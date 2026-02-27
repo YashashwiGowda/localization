@@ -106,7 +106,6 @@ All defined performance indicators were successfully met.
  
 ---
 
----
 
 ##  State Estimation Validation (PlotJuggler)
 
